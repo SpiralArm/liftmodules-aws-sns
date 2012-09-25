@@ -18,21 +18,24 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
          "net.liftmodules" %% "aws" % "sns" % (liftVersion+"-1.0.0")
 
-3. Configure your connection in `Boot.scala`:
+3. Configure your connection:
 
-	You need to supply AWS access key and secret, the topic ARN you have
-	configured in the AWS management console, the path in your Lift
-	app you want to register for receiving notifications, and 
-	the host port and protocol of your Lift app.
-
-       val config = SNSConfig(
+	You need to supply:
+	* AWS access key and secret
+	* the topic ARN you have configured in the AWS management console
+	* the path in your Lift app you want to register for receiving notifications
+	* the public host port and protocol of your Lift app.
+	
+	In `Boot.scala`:
+	
+        val config = SNSConfig(
          AWSCreds("accessKey", "secret"),
          "arn:aws:sns:us-east-1:something:topic",
          "sns" :: Nil,
           "66.123.45.678",
           9090,
       	  Protocol.HTTP
-       )
+        )                
 
 4.  Register a handler and initialise in `Boot.scala`:
 
@@ -41,6 +44,8 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
         }
 
         sns.init
+  
+  Your handler function will be passed the `Message` field value from the JSON suppled by SNS.
                
 
 5.	Publish notifications:
