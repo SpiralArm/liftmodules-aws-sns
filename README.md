@@ -6,7 +6,7 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 1. Add the following repository to your SBT project file:
 
-    For SBT 0.11:
+    For SBT 0.11+:
 
         resolvers += "liftmodules repository" at "http://repository-liftmodules.forge.cloudbees.com/release/"
 
@@ -18,32 +18,49 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
          "net.liftmodules" %% "aws" % "sns" % (liftVersion+"VERSION")
 
-3. Implement notification handler
+3. Configure your connection in `Boot.scala`:
 
- 
-    def myhandler = { 
-      case msg => println("hello %s".format(msg))
-    } : HandlerFunction
- 
-4.  Extends the SNS class supplying configuration parameters and your handler 
+	You need to supply AWS access key and secret, the topic ARN you have
+	configured in the AWS management console, the path in your Lift
+	app you want to register for receiving notifications, and 
+	the host port and protocol of your Lift app.
 
-    object Example extends SNS(SNSConfig(creds,arn,path),myhandler) 
+       val config = SNSConfig(
+         AWSCreds("accessKey", "secret"),
+         "arn:aws:sns:us-east-1:something:topic",
+         "sns" :: Nil,
+          "66.123.45.678",
+          9090,
+      	  Protocol.HTTP
+       )
 
-    Required configuration: 
+4.  Register a handler and initialise in `Boot.scala`:
 
-    	creds.access = AWS access key 
-    	creds.secret = AWS secret key 
-    	arn  		 = topic arn, this needs to exist already
-    	path		 = the path AWS will post notifications to, its a list, i.e List("my","notifications","here")
+        val sns = SNS(config) {
+           case s => println("GOT AN "+s)
+        }
 
+        sns.init
+               
 
-4. In your application's Boot.boot code initalise the service.
+5.	Publish notifications:
 
-              Example.init
-
-5.	Publish notifications 
-
-				Example ! Publish("my message")              
+	    sns ! Publish("my message")              
 
 
+## Notes
+
+### If you need to set the jetty port in SBT:
+
+In your `build.sbt`:
+
+    port in container.Configuration := 9090
+
+Or temporarily from the shell:
+
+    sbt> port in container.Configuration := 9090
+
+### Creating restricted AWS credentials
+
+[to describe]
 
