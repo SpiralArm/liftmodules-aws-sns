@@ -71,7 +71,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
   private[this] var subscriptionId: Option[String] = None
 
   def init:Unit = {
-      LiftRules.statelessDispatchTable.append(this)
+      LiftRules.statelessDispatch.append(this)
       LiftRules.unloadHooks.append(() ⇒ unsubscribe)
       this ! Subscribe()
   }
