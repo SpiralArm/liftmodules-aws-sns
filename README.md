@@ -16,7 +16,7 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 2. Include this dependency:
 
-         "net.liftmodules" %% "aws" % "sns" % (liftVersion+"VERSION")
+         "net.liftmodules" %% "aws" % "sns" % (liftVersion+"-1.0.0")
 
 3. Configure your connection in `Boot.scala`:
 
@@ -49,6 +49,8 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 
 ## Notes
+
+Uses SBT 0.11.2
 
 ### If you need to set the jetty port in SBT:
 
