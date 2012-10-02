@@ -1,6 +1,6 @@
 name := "aws-sns"
 
-version := "2.5-M1-1.0.0"
+version := "2.5-M1-1.0.1"
 
 organization := "net.liftmodules"
 
