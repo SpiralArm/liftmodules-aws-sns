@@ -114,7 +114,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
 
   private[this] def subscribe = {
       logger.info("SNS Subscribing to endpoint %s".format(ep))
-      client.subscribe(new SubscribeRequest().withTopicArn(config.arn).withProtocol("http").withEndpoint(ep))
+      client.subscribe(new SubscribeRequest().withTopicArn(config.arn).withProtocol(config.protocol.toString).withEndpoint(ep))
   }
 
   private[this] def confirmation(token: String, arn: String) = {
