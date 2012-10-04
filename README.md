@@ -16,7 +16,7 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 2. Include this dependency:
 
-         "net.liftmodules" %% "aws" % "sns" % (liftVersion+"-1.0.1")
+         "net.liftmodules" %% "aws-sns" % (liftVersion+"-1.0.1")
 
 3. Configure your connection:
 
