@@ -4,21 +4,11 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 ## Using this module
 
-1. Add the following repository to your SBT project file:
+1. Include this dependency:
 
-    For SBT 0.11+:
+         "net.liftmodules" %% "aws-sns" % (liftVersion+"-1.0.2")
 
-        resolvers += "liftmodules repository" at "http://repository-liftmodules.forge.cloudbees.com/release/"
-
-    For SBT 0.7:
-
-        lazy val liftModulesRelease = "liftmodules repository" at "http://repository-liftmodules.forge.cloudbees.com/release/"
-
-2. Include this dependency:
-
-         "net.liftmodules" %% "aws-sns" % (liftVersion+"-1.0.1")
-
-3. Configure your connection:
+2. Configure your connection:
 
 	You need to supply:
 	* AWS access key and secret
@@ -37,7 +27,7 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
       	  Protocol.HTTP
         )                
 
-4.  Register a handler and initialise in `Boot.scala`:
+3.  Register a handler and initialise in `Boot.scala`:
 
         val sns = SNS(config) {
            case s => println("GOT AN "+s)
@@ -48,14 +38,14 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
   Your handler function will be passed the `Message` field value from the JSON suppled by SNS.
                
 
-5.	Publish notifications:
+4.	Publish notifications:
 
 	    sns ! Publish("my message")              
 
 
 ## Notes
 
-Uses SBT 0.11.2
+Uses SBT 0.12
 
 ### If you need to set the jetty port in SBT:
 
