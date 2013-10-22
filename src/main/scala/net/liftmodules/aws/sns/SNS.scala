@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Spiral Arm Ltd.
+ * Copyright 2012-2013 Spiral Arm Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,13 @@ import net.liftweb.http.OkResponse
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.json.JString
 import net.liftweb.json.parse
-import net.liftweb.util.Helpers.tryo
 import net.liftweb.util.Schedule
 
 /**
  * Provides functionality for registering with Amazon SNS, publishing messages to SNS, and receiving
  * messages from SNS.
  *
- * Register the function you want to use for messages received from SNS, for the given
+ * Register the function you want to use for messages received from SNS, for a given
  * SNS configuration. For example:
 
   // Boot.scala
@@ -104,7 +103,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
   }
 
   def messageHandler = {
-    case Subscribe() if LiftRules.doneBoot ⇒	subscribe
+    case Subscribe() if LiftRules.doneBoot ⇒ subscribe
     case Subscribe() ⇒
       logger.trace("SNS Waiting until we have finished booting.")
       Schedule.perform(this, Subscribe(), 5000L)//have a nap and try again.
@@ -139,9 +138,10 @@ sealed trait SNSMsg
 case class Subscribe() extends SNSMsg
 case class Publish(msg:String) extends SNSMsg
 
-object Protocol extends Enumeration("http","https") {
+object Protocol extends Enumeration {
     type Protocol = Value
-    val HTTP, HTTPS = Value
+    val HTTP = Value(0, "http")
+    val HTTPS = Value(1, "https")
 }
 
 object SNS {

@@ -9,6 +9,10 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
          // For Lift 2.5.x (Scala 2.9 and 2.10):
          "net.liftmodules" %% "aws-sns_2.5" % "1.0.2"
 
+         // For Lift 2.6.x (Scala 2.9 and 2.10):
+         "net.liftmodules" %% "aws-sns_2.6" % "1.0.2"
+
+
 2. Configure your connection:
 
 	You need to supply:
@@ -46,7 +50,7 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
 
 ## Notes
 
-Uses SBT 0.12
+Uses SBT 0.13
 
 ### If you need to set the jetty port in SBT:
 
@@ -60,5 +64,6 @@ Or temporarily from the shell:
 
 ### Creating restricted AWS credentials
 
-[to describe]
+Yeah, you should definitely do that, rather than use your AWS account login.
+
 
