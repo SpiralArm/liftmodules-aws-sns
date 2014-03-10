@@ -12,7 +12,7 @@ moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e }
 
 scalaVersion := "2.10.3"
 
-crossScalaVersions := Seq("2.10.0","2.9.1","2.9.2")
+crossScalaVersions := Seq("2.10.0")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
