@@ -2,9 +2,9 @@ name := "aws-sns"
 
 organization := "net.liftmodules"
 
-version := "1.0.2"
+version := "1.0.3-SNAPSHOT"
 
-liftVersion <<= liftVersion ?? "2.6-SNAPSHOT"
+liftVersion <<= liftVersion ?? "3.0-SNAPSHOT"
 
 liftEdition <<= liftVersion apply { _.substring(0,3) }
 
@@ -29,7 +29,7 @@ libraryDependencies <++= liftVersion { v =>
 // Customize any further dependencies as desired
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.0.6" % "compile->default", // Logging
-  "com.amazonaws" % "aws-java-sdk" % "1.3.13"
+  "com.amazonaws" % "aws-java-sdk" % "1.7.3"
  )
 
 publishTo <<= version { _.endsWith("SNAPSHOT") match {

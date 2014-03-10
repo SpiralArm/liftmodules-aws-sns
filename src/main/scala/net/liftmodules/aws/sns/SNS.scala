@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2013 Spiral Arm Ltd.
+ * Copyright 2012-2014 Spiral Arm Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,9 +69,9 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
   // A successful subscription to SNS returns us a subscription ID, which we use to unsubscribe on shutdown.
   private[this] var subscriptionId: Option[String] = None
 
-  def init:Unit = {
+  def init():Unit = {
       LiftRules.statelessDispatch.append(this)
-      LiftRules.unloadHooks.append(() ⇒ unsubscribe)
+      LiftRules.unloadHooks.append(() ⇒ unsubscribe())
       this ! Subscribe()
   }
 
@@ -96,7 +96,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
           JString(arn)   ← json \ "TopicArn"
         } confirmation(token, arn)
 
-      case Some("Notification") ⇒ for( JString(msg) ← (json \ "Message") ) handler(msg)
+      case Some("Notification") ⇒ for( JString(msg) ← json \ "Message" ) handler(msg)
 
       case otherwise ⇒ logger.error("SNS Unknown message %s raw body %s".format(otherwise, s))
     }
@@ -121,7 +121,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
     logger.trace("SNS Confirmation %s".format(subscriptionId))
   }
 
-  private[this] def unsubscribe = {
+  private[this] def unsubscribe() : Unit = {
       logger.info("SNS Unsubscribing from %s uarn %s".format(ep, subscriptionId))
       subscriptionId.foreach { u ⇒ client.unsubscribe(new UnsubscribeRequest().withSubscriptionArn(u)) }
       subscriptionId = None
