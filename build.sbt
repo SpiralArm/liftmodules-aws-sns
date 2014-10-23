@@ -2,7 +2,7 @@ name := "aws-sns"
 
 organization := "net.liftmodules"
 
-version := "1.0.3-SNAPSHOT"
+version := "1.0.4-SNAPSHOT"
 
 liftVersion <<= liftVersion ?? "3.0-SNAPSHOT"
 
@@ -10,9 +10,9 @@ liftEdition <<= liftVersion apply { _.substring(0,3) }
 
 moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e }
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.0"
 
-crossScalaVersions := Seq("2.10.0")
+crossScalaVersions := Seq("2.10.0","2.10.3","2.11.0")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
