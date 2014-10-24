@@ -12,8 +12,8 @@ Provides a wrapper around the Amazon Web Service Simple Notification Service.
          // For Lift 2.6.x (Scala 2.9 and 2.10):
          "net.liftmodules" %% "aws-sns_2.6" % "1.0.2"
 
-         // For Lift 3.0 (Scala 2.10):
-         "net.liftmodules" %% "aws-sns_3.0" % "1.0.3-SNAPSHOT"
+         // For Lift 3.0 (Scala 2.11):
+         "net.liftmodules" %% "aws-sns_3.0" % "1.0.4-SNAPSHOT"
 
 2. Configure your connection:
 
