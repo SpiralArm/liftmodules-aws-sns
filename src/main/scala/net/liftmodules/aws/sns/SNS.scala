@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Spiral Arm Ltd.
+ * Copyright 2012-2015 Spiral Arm Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,10 @@
  */
 package net.liftmodules.aws.sns
 
+import com.amazonaws.regions.Regions
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.sns.AmazonSNSClient
-import com.amazonaws.services.sns.model.ConfirmSubscriptionRequest
-import com.amazonaws.services.sns.model.PublishRequest
-import com.amazonaws.services.sns.model.SubscribeRequest
-import com.amazonaws.services.sns.model.UnsubscribeRequest
+import com.amazonaws.services.sns.model.{ConfirmSubscriptionRequest,PublishRequest,SubscribeRequest,UnsubscribeRequest}
 
 import net.liftweb.actor.LiftActor
 import net.liftweb.common.Loggable
@@ -47,7 +45,8 @@ import net.liftweb.util.Schedule
       "rest" :: "path" :: Nil,
       "127.0.0.1",
       8080,
-      Protocol.HTTP)
+      Protocol.HTTP,
+      "us-east-1")
 
   val sns = SNS(config) {
     case s => println("I received message: "+s)
@@ -64,7 +63,8 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
 
   import config._
 
-  lazy val client = new AmazonSNSClient(new BasicAWSCredentials(creds.access,creds.secret))
+  private lazy val awsCreds = new BasicAWSCredentials(creds.access, creds.secret)
+  lazy val client: AmazonSNSClient = new AmazonSNSClient(awsCreds).withRegion(Regions.fromName(region))
 
   // A successful subscription to SNS returns us a subscription ID, which we use to unsubscribe on shutdown.
   private[this] var subscriptionId: Option[String] = None
@@ -86,7 +86,7 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
 
   private def dispatchJson(bytes: Array[Byte]): Unit = {
     val s = new String(bytes, "UTF-8") // TODO: is UTF-8 guaranteed by SNS?
-    logger.trace("Msg "+s)
+    logger.trace("SNS Msg "+s)
     val json = parse(s) // TODO: is a stack trace on parse failure acceptable here?
 
     (json \ "Type").extractOpt[String] match {
@@ -127,12 +127,9 @@ case class SNS(config: SNSConfig)(handler: SNS.HandlerFunction) extends RestHelp
       subscriptionId = None
   }
 
-
   private[this] lazy val ep:String =  "%s://%s:%s/%s".format(protocol,address,port,path.mkString("/"))
 
 }
-
-
 
 sealed trait SNSMsg
 case class Subscribe() extends SNSMsg
@@ -140,7 +137,7 @@ case class Publish(msg:String) extends SNSMsg
 
 object Protocol extends Enumeration {
     type Protocol = Value
-    val HTTP = Value(0, "http")
+    val HTTP  = Value(0, "http")
     val HTTPS = Value(1, "https")
 }
 
@@ -156,4 +153,5 @@ case class SNSConfig(creds: AWSCreds,
     path: List[String],
     address: String,
     port: Int,
-    protocol: Protocol.Value)
+    protocol: Protocol.Value,
+    region: String = "us-east-1")

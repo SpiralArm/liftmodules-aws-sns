@@ -2,9 +2,9 @@ name := "aws-sns"
 
 organization := "net.liftmodules"
 
-version := "1.0.4-SNAPSHOT"
+version := "1.1.0-SNAPSHOT"
 
-liftVersion <<= liftVersion ?? "3.0-SNAPSHOT"
+liftVersion <<= liftVersion ?? "2.6-RC2"
 
 liftEdition <<= liftVersion apply { _.substring(0,3) }
 
@@ -12,7 +12,7 @@ moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e }
 
 scalaVersion := "2.11.0"
 
-crossScalaVersions := Seq("2.11.0")
+crossScalaVersions := Seq("2.11.0", "2.10.3")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
@@ -28,14 +28,14 @@ libraryDependencies <++= liftVersion { v =>
 
 // Customize any further dependencies as desired
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.0.6" % "compile->default", // Logging
-  "com.amazonaws" % "aws-java-sdk" % "1.7.3"
+  "ch.qos.logback" % "logback-classic" % "1.0.6"   % "compile->default", // Logging
+  "com.amazonaws"  % "aws-java-sdk"    % "1.9.13"
  )
 
 publishTo <<= version { _.endsWith("SNAPSHOT") match {
-        case true  => Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
-        case false => Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
-  }
+  case true  => Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
+  case false => Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+}
  }
 
 // For local deployment:
